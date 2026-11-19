@@ -6,19 +6,101 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4824150A30318EE8008EAF2A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4824150930318EE7008EAF2A /* WidgetKit.framework */; };
+		4824150C30318EE8008EAF2A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4824150B30318EE8008EAF2A /* SwiftUI.framework */; };
+		4824151D30318EE9008EAF2A /* HabitBloomWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4824150730318EE7008EAF2A /* HabitBloomWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4825D96C30AEEA7400CEED6A /* MyHabitsBloom.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4825D96B30AEEA7400CEED6A /* MyHabitsBloom.storekit */; };
+		4825D96D30AEEA7400CEED6A /* MyHabitsBloom.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4825D96B30AEEA7400CEED6A /* MyHabitsBloom.storekit */; };
+		4857FCF9309DFAC700535633 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4857FCF8309DFAC700535633 /* Launch Screen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4824151B30318EE9008EAF2A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 482CA558302AEFBF00905F52 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4824150630318EE7008EAF2A;
+			remoteInfo = HabitBloomWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4824152230318EE9008EAF2A /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4824151D30318EE9008EAF2A /* HabitBloomWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		4824150730318EE7008EAF2A /* HabitBloomWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HabitBloomWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4824150930318EE7008EAF2A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		4824150B30318EE8008EAF2A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		48241524303191C0008EAF2A /* HabitBloomWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HabitBloomWidgetExtension.entitlements; sourceTree = "<group>"; };
+		4825D96B30AEEA7400CEED6A /* MyHabitsBloom.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = MyHabitsBloom.storekit; sourceTree = "<group>"; };
 		482CA560302AEFBF00905F52 /* HabitBloom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HabitBloom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4857FCF8309DFAC700535633 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4824151E30318EE9008EAF2A /* Exceptions for "HabitBloomWidget" folder in "HabitBloomWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4824150630318EE7008EAF2A /* HabitBloomWidgetExtension */;
+		};
+		48B9A45F3032D2E100A767FB /* Exceptions for "HabitBloom" folder in "HabitBloomWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/AppTheme.swift,
+				Model/Color.swift,
+				Model/Habit.swift,
+				Model/HabitLog.swift,
+				Model/NotificationManager.swift,
+				Model/ProManager.swift,
+				WidgetKit/SharedModelContainer.swift,
+			);
+			target = 4824150630318EE7008EAF2A /* HabitBloomWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		4824150D30318EE8008EAF2A /* HabitBloomWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4824151E30318EE9008EAF2A /* Exceptions for "HabitBloomWidget" folder in "HabitBloomWidgetExtension" target */,
+			);
+			path = HabitBloomWidget;
+			sourceTree = "<group>";
+		};
 		482CA562302AEFBF00905F52 /* HabitBloom */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				48B9A45F3032D2E100A767FB /* Exceptions for "HabitBloom" folder in "HabitBloomWidgetExtension" target */,
+			);
 			path = HabitBloom;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4824150430318EE7008EAF2A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4824150C30318EE8008EAF2A /* SwiftUI.framework in Frameworks */,
+				4824150A30318EE8008EAF2A /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		482CA55D302AEFBF00905F52 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -29,10 +111,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4824150830318EE7008EAF2A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4824150930318EE7008EAF2A /* WidgetKit.framework */,
+				4824150B30318EE8008EAF2A /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		482CA557302AEFBF00905F52 = {
 			isa = PBXGroup;
 			children = (
+				4825D96B30AEEA7400CEED6A /* MyHabitsBloom.storekit */,
+				4857FCF8309DFAC700535633 /* Launch Screen.storyboard */,
+				48241524303191C0008EAF2A /* HabitBloomWidgetExtension.entitlements */,
 				482CA562302AEFBF00905F52 /* HabitBloom */,
+				4824150D30318EE8008EAF2A /* HabitBloomWidget */,
+				4824150830318EE7008EAF2A /* Frameworks */,
 				482CA561302AEFBF00905F52 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				482CA560302AEFBF00905F52 /* HabitBloom.app */,
+				4824150730318EE7008EAF2A /* HabitBloomWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +145,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4824150630318EE7008EAF2A /* HabitBloomWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4824151F30318EE9008EAF2A /* Build configuration list for PBXNativeTarget "HabitBloomWidgetExtension" */;
+			buildPhases = (
+				4824150330318EE7008EAF2A /* Sources */,
+				4824150430318EE7008EAF2A /* Frameworks */,
+				4824150530318EE7008EAF2A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4824150D30318EE8008EAF2A /* HabitBloomWidget */,
+			);
+			name = HabitBloomWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = HabitBloomWidgetExtension;
+			productReference = 4824150730318EE7008EAF2A /* HabitBloomWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		482CA55F302AEFBF00905F52 /* HabitBloom */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 482CA56B302AEFC000905F52 /* Build configuration list for PBXNativeTarget "HabitBloom" */;
@@ -55,10 +174,12 @@
 				482CA55C302AEFBF00905F52 /* Sources */,
 				482CA55D302AEFBF00905F52 /* Frameworks */,
 				482CA55E302AEFBF00905F52 /* Resources */,
+				4824152230318EE9008EAF2A /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4824151C30318EE9008EAF2A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				482CA562302AEFBF00905F52 /* HabitBloom */,
@@ -78,8 +199,11 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2640;
-				LastUpgradeCheck = 2640;
+				LastUpgradeCheck = 2720;
 				TargetAttributes = {
+					4824150630318EE7008EAF2A = {
+						CreatedOnToolsVersion = 26.4.1;
+					};
 					482CA55F302AEFBF00905F52 = {
 						CreatedOnToolsVersion = 26.4.1;
 					};
@@ -100,21 +224,39 @@
 			projectRoot = "";
 			targets = (
 				482CA55F302AEFBF00905F52 /* HabitBloom */,
+				4824150630318EE7008EAF2A /* HabitBloomWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4824150530318EE7008EAF2A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4825D96D30AEEA7400CEED6A /* MyHabitsBloom.storekit in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		482CA55E302AEFBF00905F52 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4857FCF9309DFAC700535633 /* Launch Screen.storyboard in Resources */,
+				4825D96C30AEEA7400CEED6A /* MyHabitsBloom.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4824150330318EE7008EAF2A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		482CA55C302AEFBF00905F52 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +266,77 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		4824151C30318EE9008EAF2A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4824150630318EE7008EAF2A /* HabitBloomWidgetExtension */;
+			targetProxy = 4824151B30318EE9008EAF2A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		4824152030318EE9008EAF2A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = HabitBloomWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 84YF9KGTY2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HabitBloomWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HabitBloomWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sulo.HabitBloom.HabitBloomWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4824152130318EE9008EAF2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = HabitBloomWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 84YF9KGTY2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HabitBloomWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HabitBloomWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sulo.HabitBloom.HabitBloomWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		482CA569302AEFC000905F52 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -184,6 +396,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -241,6 +454,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -251,21 +465,26 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = HabitBloom/HabitBloom.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 84YF9KGTY2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = MyHabitsBloom;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sulo.HabitBloom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -283,21 +502,26 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = HabitBloom/HabitBloom.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 84YF9KGTY2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = MyHabitsBloom;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sulo.HabitBloom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -313,6 +537,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4824151F30318EE9008EAF2A /* Build configuration list for PBXNativeTarget "HabitBloomWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4824152030318EE9008EAF2A /* Debug */,
+				4824152130318EE9008EAF2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		482CA55B302AEFBF00905F52 /* Build configuration list for PBXProject "HabitBloom" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
