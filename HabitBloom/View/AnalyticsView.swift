@@ -362,11 +362,19 @@ struct HabitMatrixCard: View {
                         HStack(spacing: 0) {
                             ForEach(matrixDays, id: \.self) { date in
                                 let isDone = isCompleted(habit: habit, on: date)
-                                
-                                Circle()
-                                    .fill(isDone ? habitColor : theme.trackRing)
-                                    .frame(width: 16, height: 16)
-                                    .frame(maxWidth: .infinity)
+
+                                Group {
+                                    if isDone {
+                                        Circle().fill(habitColor)
+                                    } else if habit.isScheduled(on: date) {
+                                        Circle().fill(theme.trackRing)
+                                    } else {
+                                        // Unscheduled day: hollow outline marks it as disabled
+                                        Circle().strokeBorder(theme.disabledOutline, lineWidth: 1.5)
+                                    }
+                                }
+                                .frame(width: 16, height: 16)
+                                .frame(maxWidth: .infinity)
                             }
                         }
                     }

@@ -20,7 +20,12 @@ struct MainDashboardView: View {
     @State private var showingPaywallSheet = false
     @AppStorage("isProUser", store: UserDefaults(suiteName: SharedModelContainer.appGroupIdentifier)) var isProUser = false // Toggle via StoreKit
     
-    private let maxFreeHabits = 5
+    private let maxFreeHabits = 8
+
+    // Only habits scheduled on the selected day's weekday
+    private var scheduledHabits: [Habit] {
+        habits.filter { $0.isScheduled(on: selectedDate) }
+    }
 
     var body: some View {
         NavigationStack{
@@ -36,15 +41,23 @@ struct MainDashboardView: View {
                         .padding(.top, 8)
                     
                     // 2. Progress Ring / Overall Stats Card
-                    ProgressCardView(habits: habits, selectedDate: selectedDate)
+                    ProgressCardView(habits: scheduledHabits, selectedDate: selectedDate)
                         .padding(.horizontal)
                     
                     // 3. Habit List Section
                     if habits.isEmpty{
                         EmptyHabitView(showingAddHabitSheet: $showingAddHabitSheet)
+                    }else if scheduledHabits.isEmpty{
+                        VStack {
+                            Spacer()
+                            Text("No habits scheduled for this day")
+                                .font(.subheadline)
+                                .foregroundStyle(theme.textSecondary)
+                            Spacer()
+                        }
                     }else{
                         List{
-                            ForEach(habits){habit in
+                            ForEach(scheduledHabits){habit in
                                 // Value-based NavigationLink for each Habit model
                                 HabitsRowView(habit: habit, selectedDate: selectedDate) {
                                     toggleHabitCompletion(habit)
@@ -137,7 +150,7 @@ struct WeekHeaderView : View {
             ForEach (weekDates, id: \.self) { date in
                 let isSelected = caledar.isDate(date, inSameDayAs: selectedDate)
                 let isToday = caledar.isDateInToday(date)
-                
+
                 VStack(spacing: 6) {
                     Text(date.formatted(.dateTime.weekday(.narrow)))
                         .font(.caption)
@@ -268,7 +281,13 @@ struct HabitsRowView : View {
         let calendar = Calendar.current
         return habit.logs.contains(where: { calendar.isDate($0.date, inSameDayAs: selectedDate)})
     }
-    
+
+    // Habits can't be completed ahead of time
+    var isFutureDate : Bool {
+        let calendar = Calendar.current
+        return calendar.startOfDay(for: selectedDate) > calendar.startOfDay(for: Date())
+    }
+
     @AppStorage("isDarkMode") private var isDarkMode = false
     private var theme: AppTheme { AppTheme(isDark: isDarkMode) }
     
@@ -303,6 +322,8 @@ struct HabitsRowView : View {
                     .foregroundColor(isCompleted ? theme.accent : theme.textSecondary.opacity(0.5))
             }
             .buttonStyle(.plain)
+            .disabled(isFutureDate)
+            .opacity(isFutureDate ? 0.4 : 1)
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(theme.cardBackground))

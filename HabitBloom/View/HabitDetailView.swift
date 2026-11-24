@@ -81,9 +81,9 @@ struct HabitDetailView: View {
                     }
                     .padding(.horizontal, 4)
                     
-                    // Weekday Headers (Sun - Sat)
+                    // Weekday Headers (Mon - Sun)
                     HStack {
-                        ForEach(calendar.shortWeekdaySymbols, id: \.self) { day in
+                        ForEach(mondayFirstWeekdaySymbols, id: \.self) { day in
                             Text(day.prefix(1))
                                 .font(.caption2)
                                 .bold()
@@ -99,30 +99,35 @@ struct HabitDetailView: View {
                                 let isCompleted = isDateCompleted(date)
                                 let isToday = calendar.isDateInToday(date)
                                 let isFutureDate = calendar.startOfDay(for: date) > calendar.startOfDay(for: Date())
+                                let isScheduled = habit.isScheduled(on: date, calendar: calendar)
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 8, style: .continuous)
                                         .fill(
                                             isCompleted
                                             ? (Color(hex: habit.colorHex) ?? .purple)
-                                            : theme.trackRing
+                                            : (isScheduled ? theme.trackRing : Color.clear)
                                         )
                                         .aspectRatio(1, contentMode: .fit)
                                         .overlay(
+                                            // Unscheduled days get a hollow outline (matches the Analytics matrix)
                                             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                                .stroke(isToday ? theme.accent : Color.clear, lineWidth: 2)
+                                                .strokeBorder(
+                                                    isToday ? theme.accent : (isScheduled || isCompleted ? Color.clear : theme.disabledOutline),
+                                                    lineWidth: isToday ? 2 : 1.5
+                                                )
                                         )
                                         .opacity(isFutureDate ? 0.35 : 1.0)
-                                    
+
                                     Text("\(calendar.component(.day, from: date))")
                                         .font(.caption2)
                                         .fontWeight(isCompleted ? .bold : .regular)
-                                        .foregroundColor(isCompleted ? .white : theme.textPrimary)
+                                        .foregroundColor(isCompleted ? .white : (isScheduled ? theme.textPrimary : theme.textSecondary))
                                         .opacity(isFutureDate ? 0.35 : 1.0)
                                 }
                                 .onTapGesture {
                                     toggleCompletion(for: date)
                                 }
-                                .disabled(isFutureDate)
+                                .disabled(isFutureDate || !isScheduled)
                             } else {
                                 // Blank padding tile for days before start of month
                                 Color.clear
@@ -210,7 +215,13 @@ struct HabitDetailView: View {
         
     }
     // MARK: - Calendar Heatmap Matrix Logic
-    
+
+    /// Weekday symbols reordered so the week starts on Monday
+    private var mondayFirstWeekdaySymbols: [String] {
+        let symbols = calendar.shortWeekdaySymbols
+        return Array(symbols.dropFirst()) + symbols.prefix(1)
+    }
+
     /// Generates grid tiles including leading `nil` values for empty calendar slots
     private func daysForHeatmapGrid() -> [Date?] {
         guard let monthInterval = calendar.dateInterval(of: .month, for: displayedMonth),
@@ -219,7 +230,8 @@ struct HabitDetailView: View {
         }
         
         let firstWeekday = calendar.component(.weekday, from: firstDay) // 1 = Sun, 2 = Mon ...
-        let leadingPadding = firstWeekday - 1
+        // Grid columns start on Monday: Mon = 0 ... Sun = 6
+        let leadingPadding = (firstWeekday + 5) % 7
         
         var grid: [Date?] = Array(repeating: nil, count: leadingPadding)
         
@@ -248,8 +260,8 @@ struct HabitDetailView: View {
     private func toggleCompletion(for date: Date) {
         let targetDate = calendar.startOfDay(for: date)
         let today = calendar.startOfDay(for: Date())
-        // Prevent selecting future dates
-        guard targetDate <= today else { return }
+        // Prevent selecting future dates or days the habit isn't scheduled on
+        guard targetDate <= today, habit.isScheduled(on: targetDate, calendar: calendar) else { return }
         
         withAnimation(.easeInOut(duration: 0.2)) {
             
@@ -334,13 +346,13 @@ struct HabitDetailView: View {
     
     private func cancelNotification(for habit: Habit) {
         let center = UNUserNotificationCenter.current()
-        let notificationID = habit.id.uuidString
-        
+        let notificationIDs = NotificationManager.notificationIdentifiers(for: habit)
+
         // Remove pending scheduled notifications
-        center.removePendingNotificationRequests(withIdentifiers: [notificationID])
-        
+        center.removePendingNotificationRequests(withIdentifiers: notificationIDs)
+
         // Optional: Remove any notification that was already delivered and sitting in Notification Center
-        center.removeDeliveredNotifications(withIdentifiers: [notificationID])
+        center.removeDeliveredNotifications(withIdentifiers: notificationIDs)
     }
 }
 

@@ -36,8 +36,12 @@ struct HabitTimelineProvider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<HabitEntry>) -> Void) {
         let entry = fetchCurrentHabits()
         
-        // Refresh automatically every 15 minutes or when AppIntent reloads
-        let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: Date()) ?? Date()
+        // Refresh automatically every 15 minutes or when AppIntent reloads,
+        // and at midnight so the list switches to the new day's scheduled habits
+        let calendar = Calendar.current
+        let inFifteenMinutes = calendar.date(byAdding: .minute, value: 15, to: Date()) ?? Date()
+        let startOfTomorrow = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: Date())) ?? inFifteenMinutes
+        let nextUpdate = min(inFifteenMinutes, startOfTomorrow)
         let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
         
         completion(timeline)
@@ -52,8 +56,9 @@ struct HabitTimelineProvider: TimelineProvider {
             let allHabits = try context.fetch(descriptor)
             let today = Calendar.current.startOfDay(for: Date())
 
-            // Limit to top 4 habits for small/medium widget fit
-            let widgetHabits = allHabits.prefix(4).map { habit in
+            // Only habits scheduled for today, limited to top 4 for small/medium widget fit
+            let scheduledHabits = allHabits.filter { $0.isScheduled(on: today) }
+            let widgetHabits = scheduledHabits.prefix(4).map { habit in
                 let isDone = habit.logs.contains(where: { Calendar.current.isDate($0.date, inSameDayAs: today) && $0.isCompleted })
                 return HabitWidgetModel(
                     id: habit.id.uuidString,

@@ -31,6 +31,10 @@ extension Color {
     static let darkTrackRing = Color(red: 0.180, green: 0.161, blue: 0.290)   // #2E294A
     static let lightTrackRing = Color(red: 0.925, green: 0.918, blue: 0.973)  // #ECEAF8
 
+    // Disabled outline: habit matrix days the habit isn't scheduled on
+    static let darkDisabledOutline = Color(red: 0.239, green: 0.216, blue: 0.369)   // #3D375E
+    static let lightDisabledOutline = Color(red: 0.851, green: 0.839, blue: 0.922)  // #D9D6EB
+
     // Pro banner surface and hairline
     static let darkProBanner = Color(red: 0.196, green: 0.173, blue: 0.376)        // #322C60
     static let darkProBannerStroke = Color(red: 0.290, green: 0.263, blue: 0.525)  // #4A4386

@@ -36,8 +36,8 @@ struct NotificationManager {
         }
         
         for habit in habits {
-            // Cancel existing notification for this habit first
-            center.removePendingNotificationRequests(withIdentifiers: [habit.id.uuidString])
+            // Cancel existing notifications for this habit first
+            center.removePendingNotificationRequests(withIdentifiers: notificationIdentifiers(for: habit))
             
             // Skip if habit has no reminder set
             guard let reminderTime = habit.reminderTime else { continue }
@@ -77,22 +77,37 @@ struct NotificationManager {
         }
     }
     
-    /// Schedules a daily repeating local notification for a specific habit.
+    /// All notification identifiers a habit may own: one per weekday, plus the legacy
+    /// daily identifier used before per-day scheduling so old requests get cleaned up.
+    static func notificationIdentifiers(for habit: Habit) -> [String] {
+        [habit.id.uuidString] + (1...7).map { weekdayIdentifier(for: habit, weekday: $0) }
+    }
+
+    private static func weekdayIdentifier(for habit: Habit, weekday: Int) -> String {
+        "\(habit.id.uuidString)-\(weekday)"
+    }
+
+    /// Schedules a weekly repeating local notification for each of the habit's target weekdays.
     private static func scheduleNotification(for habit: Habit, reminderTime: Date) {
         let content = UNMutableNotificationContent()
         content.title = "Time for \(habit.name)!"
         content.body = "Keep your streak going today. Tap to check it off."
         content.sound = .default
-        
-        let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: reminderTime)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        
-        let request = UNNotificationRequest(
-            identifier: habit.id.uuidString,
-            content: content,
-            trigger: trigger
-        )
-        
-        UNUserNotificationCenter.current().add(request)
+
+        let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: reminderTime)
+
+        for weekday in Set(habit.targetWeekdays) {
+            var dateComponents = timeComponents
+            dateComponents.weekday = weekday
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+
+            let request = UNNotificationRequest(
+                identifier: weekdayIdentifier(for: habit, weekday: weekday),
+                content: content,
+                trigger: trigger
+            )
+
+            UNUserNotificationCenter.current().add(request)
+        }
     }
 }

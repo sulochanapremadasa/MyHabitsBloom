@@ -24,6 +24,11 @@ struct AppTheme {
         isDark ? .darkTrackRing : .lightTrackRing
     }
 
+    /// Outline for disabled tiles, e.g. habit matrix days the habit isn't scheduled on.
+    var disabledOutline: Color {
+        isDark ? .darkDisabledOutline : .lightDisabledOutline
+    }
+
     var proBanner: Color {
         isDark ? .darkProBanner : .lightProBanner
     }

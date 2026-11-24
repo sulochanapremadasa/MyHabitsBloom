@@ -21,7 +21,8 @@ struct AddHabitModalView: View {
     
     // Form State
     @State private var habitName: String = ""
-    @State private var targetDaysPerWeek: Int = 7
+    // Calendar weekday numbers (1 = Sunday ... 7 = Saturday); all days selected by default
+    @State private var targetWeekdays: Set<Int> = [1, 2, 3, 4, 5, 6, 7]
     @State private var selectedIcon: String = "star.fill"
     @State private var selectedColorHex: String = "#14B8A6"
     
@@ -53,11 +54,22 @@ struct AddHabitModalView: View {
         "#F59E0B", // Orange
         "#8B5CF6", // Purple
         "#EC4899", // Pink
-        "#6366F1"  // Indigo
+        "#6366F1",  // Indigo
+        "#06B6D4", // Cyan
+        "#0EA5E9", // Light Blue
+        "#84CC16", // Lime
+        "#EAB308", // Amber
+        "#D946EF", // Fuchsia
+        "#F43F5E", // Rose
+        "#F97316" // Orange-Red
+        
     ]
     
+    // Weekdays displayed Monday to Sunday
+    private let orderedWeekdays = [2, 3, 4, 5, 6, 7, 1]
+
     var isFormValid: Bool {
-        !habitName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !habitName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !targetWeekdays.isEmpty
     }
     
     var body: some View {
@@ -67,8 +79,34 @@ struct AddHabitModalView: View {
                     TextField("Habit Name (e.g. Read 20 mins)", text: $habitName)
                         .autocorrectionDisabled()
                         .foregroundStyle(theme.textPrimary)
-                    Stepper("Target: \(targetDaysPerWeek) days / week", value: $targetDaysPerWeek, in: 1...7)
-                        .foregroundStyle(theme.textPrimary)
+                }
+                .listRowBackground(theme.cardBackground)
+
+                Section(header: Text("Target Days")) {
+                    HStack(spacing: 8) {
+                        ForEach(orderedWeekdays, id: \.self) { weekday in
+                            let isSelected = targetWeekdays.contains(weekday)
+                            Text(Calendar.current.veryShortWeekdaySymbols[weekday - 1])
+                                .font(.callout)
+                                .bold()
+                                .foregroundStyle(isSelected ? .white : theme.textPrimary)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 38)
+                                .background(
+                                    Circle()
+                                        .fill(isSelected ? (Color(hex: selectedColorHex) ?? .blue) : (Color(hex: selectedColorHex)?.opacity(0.12) ?? .clear))
+                                )
+                                .contentShape(Circle())
+                                .onTapGesture {
+                                    withAnimation(.spring(response: 0.2)) {
+                                        toggleWeekday(weekday)
+                                    }
+                                }
+                                .accessibilityLabel(Calendar.current.weekdaySymbols[weekday - 1])
+                                .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
+                        }
+                    }
+                    .padding(.vertical, 4)
                 }
                 .listRowBackground(theme.cardBackground)
                 
@@ -97,24 +135,27 @@ struct AddHabitModalView: View {
                 .listRowBackground(theme.cardBackground)
                 
                 Section(header: Text("Color Theme")) {
-                    HStack(spacing: 12) {
-                        ForEach(availableColors, id: \.self) { hex in
-                            Circle()
-                                .fill(Color(hex: hex) ?? .blue)
-                                .frame(width: 32, height: 32)
-                                .overlay(
-                                    Circle()
-                                        .stroke(theme.textPrimary, lineWidth: selectedColorHex == hex ? 3 : 0)
-                                )
-                                .onTapGesture {
-                                    withAnimation(.spring(response: 0.2)) {
-                                        selectedColorHex = hex
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ForEach(availableColors, id: \.self) { hex in
+                                Circle()
+                                    .fill(Color(hex: hex) ?? .blue)
+                                    .frame(width: 32, height: 32)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(theme.textPrimary, lineWidth: selectedColorHex == hex ? 3 : 0)
+                                    )
+                                    .onTapGesture {
+                                        withAnimation(.spring(response: 0.2)) {
+                                            selectedColorHex = hex
+                                        }
                                     }
-                                }
+                            }
                         }
+                        // Padding keeps the selection stroke from being clipped by the scroll view
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 6)
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, 4)
                 }
                 .listRowBackground(theme.cardBackground)
                 
@@ -179,7 +220,7 @@ struct AddHabitModalView: View {
             name: trimmedName,
             icon: selectedIcon,
             colorHex: selectedColorHex,
-            targetDaysPerWeek: targetDaysPerWeek,
+            targetWeekdays: targetWeekdays.sorted(),
             reminderTime: habitReminder
         )
         
@@ -195,6 +236,16 @@ struct AddHabitModalView: View {
         dismiss()
     }
     
+    // Keeps at least one day selected so the habit always has a schedule
+    private func toggleWeekday(_ weekday: Int) {
+        if targetWeekdays.contains(weekday) {
+            guard targetWeekdays.count > 1 else { return }
+            targetWeekdays.remove(weekday)
+        } else {
+            targetWeekdays.insert(weekday)
+        }
+    }
+
     // MARK: - Notification Utilities
     
     private func requestNotificationPermission() {
