@@ -35,7 +35,14 @@ struct SettingsView: View {
     @State private var isRestoring = false
     @State private var showRestoreResult = false
     @State private var restoreResultMessage = ""
-    
+    @State private var showContactPopup = false
+    @State private var showMailUnavailableAlert = false
+
+    @Environment(\.openURL) private var openURL
+
+    private let supportEmail = "support@aplivox.com"
+    private let feedbackSubject = "MyHabitsBloom - Feedback"
+
     private var theme: AppTheme { AppTheme(isDark: isDarkMode) }
     
     // MARK: - Subscription helpers
@@ -299,10 +306,34 @@ struct SettingsView: View {
                                 .padding(.vertical, 4)
                             }
                         }
-                        
+
+                        // MARK: - Support Section
+                        SettingsSection(title: "SUPPORT") {
+                            SettingsActionRow(
+                                icon: "envelope",
+                                iconColor: theme.accent,
+                                title: "Contact Us"
+                            ) {
+                                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                    showContactPopup = true
+                                }
+                            }
+                        }
+
                     }
                 }
-                
+
+            }
+            .overlay {
+                if showContactPopup {
+                    ContactUsPopup(
+                        onContact: {
+                            dismissContactPopup()
+                            openContactEmail()
+                        },
+                        onDismiss: dismissContactPopup
+                    )
+                }
             }
            
         }
@@ -340,6 +371,12 @@ struct SettingsView: View {
             if !isPresented {
                 Task { await proManager.updatePurchasedStatus() }
             }
+        }
+        .alert("Email Not Available", isPresented: $showMailUnavailableAlert) {
+            Button("Copy Address") { UIPasteboard.general.string = supportEmail }
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Please email us at \(supportEmail)")
         }
         .alert("Restore Purchases", isPresented: $showRestoreResult) {
             Button("OK", role: .cancel) { }
@@ -535,6 +572,32 @@ struct SettingsView: View {
         }
     }
     
+    // MARK: - Contact Us
+    private func dismissContactPopup() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+            showContactPopup = false
+        }
+    }
+
+    /// Opens the mail app with a pre-filled feedback email, falling back to an alert when no mail app can handle it.
+    private func openContactEmail() {
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = supportEmail
+        components.queryItems = [URLQueryItem(name: "subject", value: feedbackSubject)]
+
+        guard let url = components.url else {
+            showMailUnavailableAlert = true
+            return
+        }
+
+        openURL(url) { accepted in
+            if !accepted {
+                showMailUnavailableAlert = true
+            }
+        }
+    }
+
     private func makeDate(hour: Int, minute: Int) -> Date {
         var comp = DateComponents()
         comp.hour = hour
@@ -675,6 +738,70 @@ struct SettingsProRow : View {
             .padding(.vertical, 4)
         }
 
+    }
+}
+
+/// Centered popup inviting the user to email support, shown over a dimmed backdrop.
+struct ContactUsPopup: View {
+    let onContact: () -> Void
+    let onDismiss: () -> Void
+    @AppStorage("isDarkMode") private var isDarkMode = false
+    private var theme: AppTheme { AppTheme(isDark: isDarkMode) }
+
+    var body: some View {
+        ZStack {
+            // Tapping outside the card behaves like "Maybe Later"
+            Color.black.opacity(0.4)
+                .ignoresSafeArea()
+                .onTapGesture(perform: onDismiss)
+                .accessibilityHidden(true)
+                .transition(.opacity)
+
+            VStack(spacing: 16) {
+                Image(systemName: "envelope.fill")
+                    .font(.title2)
+                    .foregroundStyle(theme.accent)
+                    .frame(width: 56, height: 56)
+                    .background(theme.trackRing, in: Circle())
+
+                VStack(spacing: 6) {
+                    Text("Contact Us")
+                        .font(.headline)
+                        .foregroundStyle(theme.textPrimary)
+
+                    Text("Have feedback, ideas, or need help? We'd love to hear from you.")
+                        .font(.subheadline)
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(theme.textSecondary)
+                }
+
+                VStack(spacing: 4) {
+                    Button(action: onContact) {
+                        Text("Contact")
+                            .font(.subheadline.bold())
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(theme.accent, in: RoundedRectangle(cornerRadius: 10))
+                    }
+
+                    Button(action: onDismiss) {
+                        Text("Maybe Later")
+                            .font(.subheadline)
+                            .foregroundStyle(theme.textSecondary)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                    }
+                }
+            }
+            .padding(24)
+            .frame(maxWidth: 300)
+            .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(theme.cardBackground))
+            .padding(.horizontal, 32)
+            .accessibilityElement(children: .contain)
+            .accessibilityAddTraits(.isModal)
+            .transition(.scale(scale: 0.9).combined(with: .opacity))
+        }
     }
 }
 
